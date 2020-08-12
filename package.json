@@ -1,0 +1,38 @@
+{
+  "name": "qat",
+  "version": "0.0.2",
+  "description": "Quickly automate coding tasks",
+  "keywords": [
+    "automate coding",
+    "automate tasks",
+    "quick task",
+    "automate"
+  ],
+  "homepage": "https://github.com/mohamedsahel/qat#readme",
+  "bugs": {
+    "url": "https://github.com/mohamedsahel/qat/issues"
+  },
+  "main": "src/index.js",
+  "bin": "src/index.js",
+  "preferGlobal": true,
+  "scripts": {
+    "start": "node src/index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mohamedsahel/qat.git"
+  },
+  "author": "Mohamed Sahel <sahelmohamed55@gmail.com> (www.mohamedsahel.com)",
+  "license": "MIT",
+  "private": false,
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "engineStrict": true,
+  "dependencies": {
+    "colors": "^1.4.0",
+    "commander": "^6.0.0",
+    "inquirer": "^7.3.3",
+    "shelljs": "^0.8.4"
+  }
+}
