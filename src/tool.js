@@ -1,6 +1,7 @@
 const { getCommandObj, getTaskCommandArray } = require('./utils')
+const runArgs = require('./run-args')
 
-module.exports = class Tool {
+class Tool {
   constructor(props) {
     this.name = props.name
     this.description = props.description
@@ -26,10 +27,18 @@ module.exports = class Tool {
     this.tasks.forEach((task) => {
       if (task.command[0] === args[0]) {
         task.run({
-          // some functions
+          ...runArgs,
           ...getCommandObj(task.command, args)
         })
       }
     })
   }
 }
+
+
+
+module.exports = new Tool({
+  name: 'Qat',
+  name: 'Quickly automate coding tasks',
+  version: '0.0.1',
+})

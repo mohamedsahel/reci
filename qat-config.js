@@ -1,9 +1,19 @@
+/*========================
+TO FIX:
+- check main command argument format
+- excue run function as an async funtion
+========================*/
+
 const doMethodParams = {
   createFile: (path, content) => {},
   createFolder: (path) => {},
   getFileContent: (path) => {},
   setFileContent: (path, content) => {},
+  openFile: (path) => {},
   toCamelCase: (value) => {},
+  excute: (shell_command) => {},
+  log: (value, color, background) => {},
+  cwd: '',
   command_variable: '',
 }
 
@@ -11,30 +21,39 @@ const doMethodParams = {
 module.exports = {
   tasks: [
     {
-      command: 'calcul <num_1> <operator> <num_2> <num_3>',
-      run: ({ num_1, num_2, num_3, operator }) => {
-        const logic = {
-          '+': +num_1 + +num_2,
-          'x': +num_1 * +num_2,
-          '-': +num_1 - +num_2,
-          'div': +num_1 / +num_2,
+      command: 'add <dir> <file>',
+      run: async ({ dir, file, createFolder, createFile, log, cwd }) => {
+        try {
+          await createFolder(dir)
+          await createFile(dir + '/' + file + '.jsx')
+          log('file and folder created successfully', 'green')
+        } catch (error) {
+          log(error, 'red')
         }
+      }
+    }
+    // {
+    //   command: 'add <component_name> <flag>',
+    //   run: async ({ component_name, flag, createFile, createFolder, cwd, logColor }) => {
 
-        if (!Number(num_1)) return console.error(num_1 + ' is not a number')
+    //     try {
+    //       await createFolder(`${cwd}/src/`)
+    //       await createFolder(`${cwd}/src/components`)
+    //       await createFolder(`${cwd}/src/components/${component_name}`)
+    //       await createFile(`${cwd}/src/components/${component_name}/${component_name}.component.jsx`, compTemplate(component_name))
+    //       await createFile(`${cwd}/src/components/${component_name}/${component_name}.styles.jsx`, styleTemplate(component_name))
 
-        if (!Number(num_2)) return console.error(num_2 + ' is not a number')
+    //       log(`${component_name} successfuly created!`, 'green')
 
-        if (logic[operator] === undefined)
-          return console.error(operator + ' is not an operator')
-
-        console.log(num_3)
-        console.log(logic[operator])
-      },
-    },
+    //     } catch (error) {
+    //       log(error, 'red')
+    //     }
+    //   },
+    // },
   ],
   plugins: [
     {
-      name: 'plugin_name',
+      resolve: 'plugin_name',
       options: {
         withIndex: true,
         camelCase: true,
@@ -42,4 +61,11 @@ module.exports = {
       },
     },
   ],
+  pluginsExample: {
+    name: 'create_component_template',
+    command: 'create <component_name> <with_style>',
+    run: async ({ options, component_name, with_style }) => {
+
+    }
+  }
 }

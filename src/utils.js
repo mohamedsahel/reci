@@ -1,6 +1,5 @@
 const { exec } = require('child_process')
 
-
 const isVarName = (str) => {
   if (
     typeof str !== 'string' ||
@@ -8,7 +7,7 @@ const isVarName = (str) => {
     str.match(' ') !== null ||
     str.match('-') !== null ||
     Number(str[0])
-    ) {
+  ) {
     return false
   }
 
@@ -21,7 +20,15 @@ const isVarName = (str) => {
   return true
 }
 
-const checkArgumentFormat = (string) => {
+const getArgument = (string, isMain) => {
+  if (isMain) {
+    if (!isVarName(string))
+      throw `${string} is not a valide argument format`
+    else {
+      return string
+    }
+  }
+
   const beginRegexp = /^</
   const endRegexp = />$/
 
@@ -46,28 +53,25 @@ const getTaskCommandArray = (string) => {
 
   const outputArray = []
 
-  argsArray.forEach((argument, index) => {
-    if (index === 0) outputArray.push(argument)
-    else {
-      try {
-        outputArray.push(checkArgumentFormat(argument))
-      } catch(error) {
-        return console.log(error)
-      }
-    }
-  })
+  try {
+    argsArray.forEach((argument, index) => {
+      if(index === 0) outputArray.push(getArgument(argument, true))
+      else outputArray.push(getArgument(argument))
+    })
+  } catch (error) {
+    return console.log(error)
+  }
 
-  if(outputArray.length !== argsArray.length) {
+  if (outputArray.length !== argsArray.length) {
     return
   }
   return outputArray
 }
 
-
 const getCommandObj = (commandArray, argsArray) => {
   const outputObj = {}
   commandArray.forEach((item, index) => {
-    if(index === 0) return
+    if (index === 0) return
     outputObj[item] = argsArray[index]
   })
   return outputObj
@@ -77,8 +81,6 @@ module.exports = {
   getCommandObj,
   getTaskCommandArray,
 }
-
-
 
 // const execCallback = (error, stdout, stderr) => {
 //   if (error) {
