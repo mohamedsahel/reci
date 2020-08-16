@@ -1,7 +1,6 @@
 /*========================
 TO FIX:
-- check main command argument format
-- excue run function as an async funtion
+//// check main command argument format
 ========================*/
 
 const doMethodParams = {
@@ -21,35 +20,22 @@ const doMethodParams = {
 module.exports = {
   tasks: [
     {
-      command: 'add <dir> <file>',
-      run: async ({ dir, file, createFolder, createFile, log, cwd }) => {
+      command: 'push <message>',
+      run: async ({ _message, log, execute }) => {
         try {
-          await createFolder(dir)
-          await createFile(dir + '/' + file + '.jsx')
-          log('file and folder created successfully', 'green')
-        } catch (error) {
-          log(error, 'red')
+          await execute(
+            [
+              'git add .',
+              `git commit -m "${_message}"`,
+              'git push origin develop'
+            ]
+          )
+          log('changes successfully committed', 'green')
+        } catch (err) {
+          throw new Error(err)
         }
       }
     }
-    // {
-    //   command: 'add <component_name> <flag>',
-    //   run: async ({ component_name, flag, createFile, createFolder, cwd, logColor }) => {
-
-    //     try {
-    //       await createFolder(`${cwd}/src/`)
-    //       await createFolder(`${cwd}/src/components`)
-    //       await createFolder(`${cwd}/src/components/${component_name}`)
-    //       await createFile(`${cwd}/src/components/${component_name}/${component_name}.component.jsx`, compTemplate(component_name))
-    //       await createFile(`${cwd}/src/components/${component_name}/${component_name}.styles.jsx`, styleTemplate(component_name))
-
-    //       log(`${component_name} successfuly created!`, 'green')
-
-    //     } catch (error) {
-    //       log(error, 'red')
-    //     }
-    //   },
-    // },
   ],
   plugins: [
     {

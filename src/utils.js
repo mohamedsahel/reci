@@ -1,4 +1,3 @@
-const { exec } = require('child_process')
 
 const isVarName = (str) => {
   if (
@@ -72,7 +71,7 @@ const getCommandObj = (commandArray, argsArray) => {
   const outputObj = {}
   commandArray.forEach((item, index) => {
     if (index === 0) return
-    outputObj[item] = argsArray[index]
+    outputObj['_' + item] = argsArray[index]
   })
   return outputObj
 }
@@ -82,15 +81,3 @@ module.exports = {
   getTaskCommandArray,
 }
 
-// const execCallback = (error, stdout, stderr) => {
-//   if (error) {
-//     console.error(`exec error: ${error}`)
-//     return
-//   }
-//   if(stdout.length) {
-//     console.log(`${stdout}`)
-//   }
-//   if(stderr.length) {
-//     console.log(`${stderr}`)
-//   }
-// }

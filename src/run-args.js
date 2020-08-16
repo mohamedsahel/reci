@@ -1,5 +1,8 @@
 const fs = require('fs')
 const path = require('path')
+const { exec } = require('child_process')
+const { isArray } = require('util')
+
 const cwd = process.cwd()
 
 const log = (string, color, bgColor) => {
@@ -33,21 +36,50 @@ const log = (string, color, bgColor) => {
   console.log(colors[color] + '%s\x1b[0m', string)
 }
 
-const createFolder = async folderPath => {
-  try {
-    await fs.mkdir(path.join(cwd, folderPath), () => {}, { recursive: true })
-  } catch (err) {
-    throw new Error(err)
+const createFolder = folderPath => new Promise((resolve, reject) => {
+  fs.mkdir(path.join(cwd, folderPath), { recursive: true }, err => {
+    if(err) return reject(err)
+    resolve(folderPath + '/')
+  })
+})
+
+const createFile = (filePath, content = '') => new Promise((resolve, reject) => {
+  fs.writeFile(path.join(cwd, filePath), content, (err) => {
+    if(err) return reject(err)
+    resolve(filePath + '/')
+  })
+})
+
+
+
+const execCommand = cmd => new Promise((resolve, rejecet) => {
+  exec(cmd, (error, stdout, stderr) => {
+    if (error) {
+     log(error, 'red')
+    }
+    resolve(stdout ? stdout : stderr)
+   })
+})
+
+const execute = async (commands) => {
+  let currentOutput
+  if (isArray(commands)) {
+    for(command of commands) {
+      currentOutput = await execCommand(command)
+      if(currentOutput.trim()) {
+        console.log(currentOutput)
+      }
+    }
+  } else if (typeof commands === 'string') {
+    currentOutput = await execCommand(commands)
+    if(currentOutput.trim()) {
+      console.log(currentOutput)
+    }
+  } else {
+    return
   }
 }
 
-const createFile = async (filePath, content = '') => {
-  try {
-    await fs.writeFile(path.join(cwd, filePath), content, () => {})
-  } catch (err) {
-    throw new Error(err)
-  }
-}
 
 
 module.exports = {
@@ -55,4 +87,5 @@ module.exports = {
   cwd,
   createFolder,
   createFile,
+  execute
 }
