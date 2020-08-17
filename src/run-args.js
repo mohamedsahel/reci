@@ -1,9 +1,9 @@
 const fs = require('fs')
 const path = require('path')
 const { exec } = require('child_process')
-const { isArray } = require('util')
 
 const cwd = process.cwd()
+
 
 const log = (string, color, bgColor) => {
   if(!color) return console.log(string)
@@ -36,6 +36,7 @@ const log = (string, color, bgColor) => {
   console.log(colors[color] + '%s\x1b[0m', string)
 }
 
+
 const createFolder = folderPath => new Promise((resolve, reject) => {
   fs.mkdir(path.join(cwd, folderPath), { recursive: true }, err => {
     if(err) return reject(err)
@@ -43,13 +44,13 @@ const createFolder = folderPath => new Promise((resolve, reject) => {
   })
 })
 
+
 const createFile = (filePath, content = '') => new Promise((resolve, reject) => {
   fs.writeFile(path.join(cwd, filePath), content, (err) => {
     if(err) return reject(err)
     resolve(filePath + '/')
   })
 })
-
 
 
 const execCommand = cmd => new Promise((resolve, rejecet) => {
@@ -61,9 +62,10 @@ const execCommand = cmd => new Promise((resolve, rejecet) => {
    })
 })
 
+
 const execute = async (commands) => {
   let currentOutput
-  if (isArray(commands)) {
+  if (Array.isArray(commands)) {
     for(command of commands) {
       currentOutput = await execCommand(command)
       if(currentOutput.trim()) {

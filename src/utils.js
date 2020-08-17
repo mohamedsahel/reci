@@ -1,11 +1,11 @@
+const { log } = require('./run-args')
 
 const isVarName = (str) => {
   if (
     typeof str !== 'string' ||
     str.trim() !== str ||
     str.match(' ') !== null ||
-    str.match('-') !== null ||
-    Number(str[0])
+    str.match('-') !== null
   ) {
     return false
   }
@@ -19,65 +19,40 @@ const isVarName = (str) => {
   return true
 }
 
-const getArgument = (string, isMain) => {
-  if (isMain) {
-    if (!isVarName(string))
-      throw `${string} is not a valide argument format`
-    else {
-      return string
-    }
-  }
-
-  const beginRegexp = /^</
-  const endRegexp = />$/
-
-  if (beginRegexp.test(string) && endRegexp.test(string)) {
-    const variable = string.replace('<', '').replace('>', '')
-    if (!isVarName(variable)) {
-      throw `${variable} is not valide variable format`
-    } else {
-      return variable
-    }
-  } else if (beginRegexp.test(string)) {
-    throw `${string} is not valide argument format, do you mean ${string}> ?`
-  } else if (endRegexp.test(string)) {
-    throw `${string} is not valide argument format, do you mean <${string} ?`
-  } else {
-    throw `${string} is not valide argument format, do you mean <${string}> ?`
-  }
-}
-
 const getTaskCommandArray = (string) => {
-  const argsArray = string.split(' ').filter((item) => item.length !== 0)
-
+  const argsArray = string.split(' ')
   const outputArray = []
+  let errors = []
 
-  try {
-    argsArray.forEach((argument, index) => {
-      if(index === 0) outputArray.push(getArgument(argument, true))
-      else outputArray.push(getArgument(argument))
-    })
-  } catch (error) {
-    return console.log(error)
+  argsArray.forEach((arg, index) => {
+    if(!isVarName('_' + arg)) {
+      return errors.push(`${arg} is not in a valide argument format`)
+    }
+    if(arg.trim().length === 0) return
+    if(index === 0) return outputArray.push(arg)
+    else return outputArray.push('_' + arg)
+  })
+
+  if (errors.length) {
+    for(error of errors) { log(error, 'red') }
+    return null
   }
 
-  if (outputArray.length !== argsArray.length) {
-    return
-  }
   return outputArray
 }
 
-const getCommandObj = (commandArray, argsArray) => {
+const getArgumentsObj = (commandArray, argsArray) => {
   const outputObj = {}
-  commandArray.forEach((item, index) => {
-    if (index === 0) return
-    outputObj['_' + item] = argsArray[index]
-  })
+  if(commandArray.length) {
+    commandArray.forEach((item, index) => {
+      if(index === 0) return
+      outputObj[item] = argsArray[index]
+    })
+  }
   return outputObj
 }
 
 module.exports = {
-  getCommandObj,
+  getArgumentsObj,
   getTaskCommandArray,
 }
-

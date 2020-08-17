@@ -1,4 +1,4 @@
-const { getCommandObj, getTaskCommandArray } = require('./utils')
+const { getArgumentsObj, getTaskCommandArray } = require('./utils')
 const runArgs = require('./run-args')
 
 class Tool {
@@ -28,7 +28,7 @@ class Tool {
       if (task.command[0] === args[0]) {
         task.run({
           ...runArgs,
-          ...getCommandObj(task.command, args)
+          ...getArgumentsObj(task.command, args)
         })
       }
     })

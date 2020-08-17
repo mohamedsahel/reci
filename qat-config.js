@@ -4,30 +4,30 @@ TO FIX:
 ========================*/
 
 const doMethodParams = {
-  createFile: (path, content) => {},
-  createFolder: (path) => {},
+  // // createFile: (path, content) => {},
+  // // createFolder: (path) => {},
   getFileContent: (path) => {},
   setFileContent: (path, content) => {},
   openFile: (path) => {},
   toCamelCase: (value) => {},
   excute: (shell_command) => {},
-  log: (value, color, background) => {},
-  cwd: '',
-  command_variable: '',
+  // // log: (value, color, background) => {},
+  // // cwd: '',
+  // // command_variable: '',
 }
 
 
 module.exports = {
   tasks: [
     {
-      command: 'push <message>',
+      command: 'push message',
       run: async ({ _message, log, execute }) => {
         try {
           await execute(
             [
               'git add .',
               `git commit -m "${_message}"`,
-              'git push origin develop'
+              `git push origin develop`
             ]
           )
           log('changes successfully committed', 'green')
