@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const { exec } = require('child_process')
+const { exec, execFile } = require('child_process')
 
 const cwd = process.cwd()
 
@@ -63,6 +63,24 @@ const execCommand = cmd => new Promise((resolve, rejecet) => {
 })
 
 
+const openFiles = async (paths) => {
+
+  try {
+    if(typeof paths === 'string') await execCommand(`code -r ${paths}`)
+    else if(Array.isArray(paths)) await execCommand(`code -r ${paths.join(' ')}`)
+    else throw paths + ' is not a correct path'
+  } catch (err) {
+    throw err
+  }
+}
+
+
+const openURL = async (url) => {
+  const start = (process.platform == 'darwin'? 'open': process.platform == 'win32'? 'start': 'xdg-open')
+  await execCommand(start + ' ' + url)
+}
+
+
 const execute = async (commands) => {
   let currentOutput
   if (Array.isArray(commands)) {
@@ -89,5 +107,7 @@ module.exports = {
   cwd,
   createFolder,
   createFile,
+  openFiles,
+  openURL,
   execute
 }
