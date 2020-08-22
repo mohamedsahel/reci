@@ -2,10 +2,9 @@
 const doMethodParams = {
   // // createFile: (path, content) => {},
   // // createFolder: (path) => {},
-  getFileContent: (path) => {},
-  setFileContent: (path, content) => {},
+  // // getFileContent: (path) => {},
   // // openFiles: (path=[]) => {},
-  excuteFile: (path) => {},
+  // // excuteFile: (path) => {},
   // // excute: (shell_command) => {},
   // // log: (value, color, background) => {},
   // // cwd: '',
@@ -16,16 +15,9 @@ const doMethodParams = {
 module.exports = {
   tasks: [
     {
-      command: 'multi num1 num2 ...nums',
-      run: async ({ _num1, _num2, _nums, log, openFiles }) => {
-        log(_num1 + _num2 + _nums, 'yellow')
-
-        // try {
-        //   await openFiles(null)
-        //   log('file successfuly opened', 'green')
-        // } catch (err) {
-        //   log(err, 'red')
-        // }
+      command: 'add file',
+      run: async ({ execute, _file, log }) => {
+        execute('touch ' + _file)
       }
     },
     {
