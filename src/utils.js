@@ -20,28 +20,28 @@ const isVarName = (str) => {
 }
 
 const getTaskCommandArray = (string) => {
-  if(!string) return null
+  if (!string) return null
   const argsArray = string.trim().split(' ')
   const outputArray = []
   let errors = []
 
-
   argsArray.forEach((arg, index) => {
-
     // filter spaces and '' items, and undefined
-    if(arg.trim().length === 0 || arg === undefined) return
+    if (arg.trim().length === 0 || arg === undefined) return
 
     // check for arrays (...agr) variables
-    if(arg.startsWith('...')) {
+    if (arg.startsWith('...')) {
       const argName = arg.split('...').join('')
 
       //add error if there are some other variables after the array variable
-      if(index !== argsArray.length - 1) {
-        return errors.push(`can not add arguments after the array variable (${arg})`)
+      if (index !== argsArray.length - 1) {
+        return errors.push(
+          `can not add arguments after the array variable (${arg})`
+        )
       }
 
       // check if the array variable is in a valide format
-      if(!isVarName('_' + argName)) {
+      if (!isVarName('_' + argName)) {
         return errors.push(`${arg} is not in a valide argument format`)
       }
 
@@ -49,32 +49,32 @@ const getTaskCommandArray = (string) => {
     }
 
     // check if the variable is in a valide format
-    if(!isVarName('_' + arg)) {
+    if (!isVarName('_' + arg)) {
       return errors.push(`${arg} is not in a valide argument format`)
     }
 
     // push first argument with no _ at the begining
-    if(index === 0) return outputArray.push(arg)
-
+    if (index === 0) return outputArray.push(arg)
     // push valide variable with _ at the beginning
     else return outputArray.push('_' + arg)
   })
 
   if (errors.length) {
-    for(error of errors) { log(error, 'red') }
+    for (error of errors) {
+      log(error, 'red')
+    }
     return null
   }
-
 
   return outputArray
 }
 
 const getArgumentsObj = (commandArray, argsArray) => {
   const outputObj = {}
-  if(commandArray.length) {
+  if (commandArray.length) {
     commandArray.forEach((item, index) => {
-      if(index === 0) return
-      if(Array.isArray(item)) {
+      if (index === 0) return
+      if (Array.isArray(item)) {
         outputObj[item[0]] = argsArray.splice(index, argsArray.length - 1)
         return
       }

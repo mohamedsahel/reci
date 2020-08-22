@@ -1,23 +1,9 @@
-
-const doMethodParams = {
-  // // createFile: (path, content) => {},
-  // // createFolder: (path) => {},
-  // // getFileContent: (path) => {},
-  // // openFiles: (path=[]) => {},
-  // // excuteFile: (path) => {},
-  // // excute: (shell_command) => {},
-  // // log: (value, color, background) => {},
-  // // cwd: '',
-  // // command_variable: '',
-}
-
-
 module.exports = {
   tasks: [
     {
       command: 'add file',
-      run: async ({ execute, _file, log }) => {
-        execute('touch ' + _file)
+      run: async ({ createFile, _file, log }) => {
+        createFile(_file)
       }
     },
     {
