@@ -38,5 +38,5 @@ class Tool {
 module.exports = new Tool({
   name: 'Qat',
   name: 'Quickly automate coding tasks',
-  version: '0.0.1',
+  version: '0.1.3',
 })
