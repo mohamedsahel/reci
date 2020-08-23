@@ -7,11 +7,8 @@ Qat is Node Cli Tool for quickly automate coding tasks using command line.
 ## How to get started?
 
  1. run `npm i -g qat`
- <br />
  2. add **qat-config.js** file to the root directory of the project, and start writing your custom configuration
- <br />
  3. run `qat your-custom-command`
- <br />
  4. watch the magic happen :clap: :sparkles:
 
 ## Exapmles of qat-config.js 
