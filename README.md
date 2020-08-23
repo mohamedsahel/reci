@@ -87,6 +87,7 @@ the command arguments will passed as properties of the first argument of the *ru
 
  * `run` method is the function will be execute when the command get run, the method accept one object argument that contains many properties ( command agruments, and cwd ), and methods ( log, execute, createFile ... )
  <br />
+ 
   *  ***command arguments:***  ( _commitMessage for exapmle ), unlimited number of arguments can be added.
       * example:
 ```javascript
