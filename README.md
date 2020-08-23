@@ -1,13 +1,17 @@
 ## What is Qat?
-Qat is Node Cli Tool for quickly automate coding tasks using command line
+Qat is Node Cli Tool for quickly automate coding tasks using command line.
 <br/>
+<br />
 **Q A T** = **Q**uickly **A**utmate **T**ask
 
 ## How to get started?
 
  1. run `npm i -g qat`
+ <br />
  2. add **qat-config.js** file to the root directory of the project, and start writing your custom configuration
+ <br />
  3. run `qat your-custom-command`
+ <br />
  4. watch the magic happen :clap: :sparkles:
 
 ## Exapmles of qat-config.js 
@@ -17,13 +21,13 @@ Qat is Node Cli Tool for quickly automate coding tasks using command line
 ```javascript
 module.exports = {
  tasks: [
-	{
-		command: 'sum num1 num2',
-		run: ({ _num1, _num2, log }) => {
-			log(+_num1 + +_num2)
-		}
-	}
- ]
+    {
+      command: 'sum num1 num2',
+      run: ({ _num1, _num2, log }) => {
+	log(+_num1 + +_num2)
+      }
+    }
+  ]
 }
 ```
 then run `qat sum 1 3` in the command line, `4` will be printed
@@ -33,21 +37,21 @@ then run `qat sum 1 3` in the command line, `4` will be printed
 
  - a task for committing changes
 ```javascript
-module.exports = {
- tasks: [
-	{
-		command: 'commit message',
-		run: async ({ _message, execute, log }) => {
-			await execute([
-				'git add .',
-				`git commit -m "${message}"`,
-				'git push origin master'
-			])
-			log('changes successfully committed',  'green')
-		}
-	}
- ]
-}
+tasks: [
+  ...
+  {
+    command: 'commit message',
+    run: async ({ _message, execute, log }) => {
+      await execute([
+	'git add .',
+	`git commit -m "${message}"`,
+	'git push origin master'
+      ])
+      log('changes successfully committed',  'green')
+    }
+  }
+]
+
 ```
 when you run `qat commit 'some commit message'` it will automaticly add the changes, commit it, and push it to the origin remote, then it will print a green color message  "changes successfully committed".
 
@@ -56,24 +60,24 @@ when you run `qat commit 'some commit message'` it will automaticly add the chan
 
  - a task for automaticly generate a commponent folder and starter files
 ```javascript
-module.exports = {
- tasks: [
-	{
-		command: 'add-component componentName',
-		run: async ({ _componentName, createFolder, createFile, log }) => {
-			const folderPath = `./src/components/${_componentName}`
-			const compoPath = folderPath + `/${_componentName}.jsx`
-			const stylesPath = folderPath + `/${_componentName}.css`
+tasks: [
+  ...
+  {
+    command: 'add-component componentName',
+    run: async ({ _componentName, createFolder, createFile, log }) => {
+      const folderPath = `./src/components/${_componentName}`
+      const compoPath = folderPath + `/${_componentName}.jsx`
+      const stylesPath = folderPath + `/${_componentName}.css`
 				
-			await createFolder(folderPath)
-			await createFile(compoPath, '')
-			await createFile(stylesPath, '')
+      await createFolder(folderPath)
+      await createFile(compoPath, '')
+      await createFile(stylesPath, '')
 				
-			log(`${_componentName} added successfully`,  'green')
-		}
-	}
+      log(`${_componentName} added successfully`,  'green')
+    }
+  }
  ]
-}
+
 ```
 then run `qat add-component header` 
 it will automaticly generate the *Header* component directory, and its styles files with the content provided as the second argument of *createFile* function,  then it will print a green color message  "Header added successfully".
@@ -145,7 +149,7 @@ execute(["cd src", "touch newFile.js"])
 ```
 <br />
 	
-* ***executeFile***: excute shell scripts file :smiley:
+* ***executeFile***: excute shell scripts file
 	* *exapmle*: 
 ```javascript 
 executeFile("./script.sh")
