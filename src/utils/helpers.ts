@@ -1,11 +1,10 @@
 import PATH from 'path'
 import { exec } from 'child_process'
-const FS = require('fs').promises
 
 import { getCwd } from './cwd'
 
 
-export const resolvePath = (pathArg: string) => PATH.resolve(getCwd(), pathArg)
+export const resolvePath = (...paths: string[]) => PATH.resolve(getCwd(), ...paths)
 
 // helper fonction for excuting command line commands
 export const execCommand = (cmd: string) => {
@@ -21,5 +20,20 @@ export const execCommand = (cmd: string) => {
 
 // error handler
 export const handleError = (topic: string) => {
-  return (error: string) => console.log(`Error: ${topic} >> `, error)
+  return (error?: string) => console.log(`Error: ${topic} \n`, error)
+}
+
+// get recipe and recipeName
+export const getRecipeCoord = (input: string) => {
+  if(input.includes('/')) {
+    const array = input.trim().split('/')
+    return {
+      username: array[0],
+      recipeName: array[1]
+    }
+  }
+
+  return {
+    recipeName: input.trim()
+  }
 }

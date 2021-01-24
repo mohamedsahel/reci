@@ -1,7 +1,7 @@
 import PATH from 'path'
 
-export const cwd = process.cwd()
+import { getCwd } from './cwd'
 
 
-export const getCommands = () => require(PATH.join(cwd, 'qat.commands.js')).default
-export const getGist = () => require(PATH.join(cwd, 'qat.gist.js')).default
+export const getCommands = () => require(PATH.join(getCwd(), 'reci.commands.js')).default
+export const getConfig = () => require(PATH.join(getCwd(), 'reci.config.js')).default

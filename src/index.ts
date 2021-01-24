@@ -1,15 +1,25 @@
 #!/usr/bin/env node
 import { getCommands } from './utils/config'
 import cli from './cli'
-import PATH from 'path'
-import fs from './lib/run-helpers/fs'
+
+import inquirer from 'inquirer'
+
+(async () => {
+  const { command } = await inquirer.prompt([{
+      type: 'input',
+      name: 'command',
+      message: 'type a command'
+    }])
+
+    console.log(command.split(' '))
+    cli.execute(command.trim().split(' '))
+  }
+)()
 
 // cli.addCommands(getCommands())
 
-// fs.copy('src/utils', 'src/.noooo', ['cwd.ts', 'config.ts'])
-
 // // const command = process.argv.splice(2)
-// const command = ['test']
+// const command = ['remove', 'my-recipe']
 
 
 // cli.execute(command)

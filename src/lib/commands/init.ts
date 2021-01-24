@@ -13,12 +13,12 @@ const qatTemplate = `export default {
 export default async (args: string[], helpers: any) => {
   const { fs, applyTemplate, prompt, log } = helpers
 
-  const qatPath = 'qat.gist.js'
-  let name = path.basename(process.cwd())
+  const qatPath = 'reci.config.js'
+  let name
   let description = ''
 
   if(args[0] === '--y') {
-
+    name = path.basename(process.cwd())
   } else {
     const answers = await prompt([
       {

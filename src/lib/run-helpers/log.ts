@@ -7,11 +7,11 @@ const colors: any = {
   blue: '\x1b[34m',
 }
 
-type LogType = (text: any, status?: 'default' | 'success' | 'info' | 'warn' | 'error' | undefined) => void
+type LogType = (text: any, status?: 'default' | 'success' | 'info' | 'warning' | 'error' | undefined) => void
 
-const log: LogType = (text, status) => {
+const log: LogType = (text, status = 'default') => {
   switch(status) {
-    case undefined || 'default' :
+    case 'default' :
       console.log(text)
       break;
 
@@ -19,7 +19,11 @@ const log: LogType = (text, status) => {
       console.log(colors.green + '%s\x1b[0m', text)
       break;
 
-    case 'warn' :
+    case 'info' :
+      console.log(colors.blue + '%s\x1b[0m', text)
+      break;
+
+    case 'warning' :
       console.log(colors.yellow + '%s\x1b[0m', text)
       break;
 

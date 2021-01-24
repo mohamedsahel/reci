@@ -1,4 +1,4 @@
-import { getGist } from '../../utils/config'
+import { getConfig } from '../../utils/config'
 
 export default async (args: string[], helpers: any) => {
   const { fs, log } = helpers
@@ -11,5 +11,5 @@ export default async (args: string[], helpers: any) => {
   }).catch((err: Error) => log(err, 'error'))
 
 
-  await getGist().run(args, helpers)
+  await getConfig().run(args, helpers)
 }

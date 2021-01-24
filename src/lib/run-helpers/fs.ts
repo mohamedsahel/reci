@@ -4,7 +4,8 @@ const FS  = require('fs').promises
 const PATH = require('path')
 
 
-import { execCommand, handleError, resolvePath } from '../../utils/helpers'
+import { execCommand, handleError } from '../../utils/helpers'
+import { getCwd } from '../../utils/cwd'
 
 
 /***************
@@ -15,12 +16,6 @@ import { execCommand, handleError, resolvePath } from '../../utils/helpers'
 **************/
 
 class Fs {
-  root = process.cwd()
-
-  setRoot = (path: string) => {
-    this.root = PATH.resolve(path)
-  }
-
   private hasExtension = (path: string) => {
     const base = PATH.basename(path)
 
@@ -62,7 +57,7 @@ class Fs {
     return path
   }
 
-  create = async (object: any, root: string = this.root) => {
+  create = async (object: any, parentPath: string = getCwd()) => {
     if(!object) return
 
     if(typeof object === 'string') {
@@ -77,19 +72,18 @@ class Fs {
 
 
     if(Array.isArray(object)) {
-      object.forEach(subObject => this.create(subObject, root))
+      object.forEach(subObject => this.create(subObject, parentPath))
       return
     }
 
 
     if(typeof object === 'object') {
-
       if(!isValidePath(object.path)) {
-        handleError(`Valid path expected: receive (${object.path})`)
+        handleError(`Valid path expected: receive (${object.path})`)()
       }
 
       if(object.type === 'folder' || object.hasOwnProperty('children')) {
-          const folderPath = await this.createFolder(object.path)
+          const folderPath = await this.createFolder(PATH.join(parentPath, object.path))
 
           await this.create(object.children, folderPath)
 
@@ -97,13 +91,13 @@ class Fs {
       }
 
       if(object.type === 'file' || object.hasOwnProperty('content')) {
-        this.createFile(object.path, object.content)
+        this.createFile(PATH.join(parentPath, object.path), object.content)
 
         return
       }
 
       if(this.hasExtension(object.path)) {
-        this.createFile(object.path, object.content)
+        this.createFile(PATH.join(parentPath, object.path), object.content)
 
         return
       }
@@ -116,14 +110,17 @@ class Fs {
   /************
     Read
   ************/
- read = async (path: string) => {
+  private read = async (path: string, method: Function) => {
     const isExists = await this.isExists(path)
     if(!isExists) return
 
-    const content = await FS.readFile(path, 'utf8').catch(handleError(`read file [${path}]`))
+    const content = await method(path, 'utf8').catch(handleError(`read file [${path}]`))
 
     return content
   }
+
+  readFile = async (path: string) => this.read(path, FS.readFile)
+  readDir = async (path: string) => this.read(path, FS.readdir)
 
 
 
@@ -135,7 +132,7 @@ class Fs {
    if(!isExists) return
 
    try {
-     const oldConent = await this.read(path)
+     const oldConent = await this.readFile(path)
      const newConent = await editConent(oldConent)
 
      await this.create({
@@ -165,7 +162,7 @@ class Fs {
      await FS.unlink(path).catch(handleError(`delete file [${path}]`))
     }
     else if(stats.isDirectory) {
-      await FS.rmdir(resolvePath(path), { recursive: true }).catch(handleError(`delete folder [${path}]`))
+      await FS.rmdir(path, { recursive: true }).catch(handleError(`delete folder [${path}]`))
     }
   }
 
@@ -193,7 +190,7 @@ class Fs {
       if (typeof paths === 'string') await execCommand(`code -r ${paths}`)
       else if (Array.isArray(paths)) await execCommand(`code -r ${paths.join(' ')}`)
     } catch (err) {
-      handleError(`open files [${paths}]`)
+      handleError(`open files [${paths}]`)(err)
     }
   }
 
@@ -215,7 +212,7 @@ class Fs {
   ************/
   copy = async (srcDir, destDir, files) => {
     const isDestExist = await this.isExists(destDir)
-    
+
     if(!isDestExist) {
       await this.create({
         path: destDir,

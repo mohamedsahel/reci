@@ -39,9 +39,12 @@
   },
   "engineStrict": true,
   "dependencies": {
+    "axios": "^0.21.1",
     "chokidar": "^3.4.3",
+    "configstore": "^5.0.1",
     "inquirer": "^7.3.3",
-    "is-valid-path": "^0.1.1"
+    "is-valid-path": "^0.1.1",
+    "uniqid": "^5.2.0"
   },
   "devDependencies": {
     "@types/inquirer": "^7.3.1",

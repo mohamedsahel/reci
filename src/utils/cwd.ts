@@ -1,11 +1,6 @@
-import PATH from 'path'
+export const getCwd = () => process.cwd()
 
-let cwd = process.cwd()
-
-export const getCwd = () => {
-  return cwd
-}
 
 export const setCwd = (path: string) => {
-  cwd = PATH.resolve(cwd, path)
+  process.chdir(path)
 }
